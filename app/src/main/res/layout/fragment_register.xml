@@ -29,16 +29,25 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/registermailET"
+            android:id="@+id/registerPhoneET"
             android:layout_marginBottom="20dp"
             android:layout_below="@+id/registerNameET"
+            android:hint="Phone"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/registerMailET"
+            android:layout_marginBottom="20dp"
+            android:layout_below="@+id/registerPhoneET"
+            android:singleLine="true"
             android:hint="College Mail"/>
 
         <EditText
             android:layout_width="match_parent"
             android:inputType="textPassword"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/registermailET"
+            android:layout_below="@+id/registerMailET"
             android:id="@+id/registerPasswordET"
             android:layout_marginBottom="20dp"
             android:hint="Password"/>
@@ -48,7 +57,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="25dp"
             android:id="@+id/registerSectionLL"
             android:layout_below="@+id/registerPasswordET">
 

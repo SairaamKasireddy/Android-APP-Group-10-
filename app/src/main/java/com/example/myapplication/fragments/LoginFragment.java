@@ -125,26 +125,12 @@ public class LoginFragment extends Fragment {
             public void onErrorResponse(VolleyError error) {
                 loginIdET.setText("");
                 loginPasswordET.setText("");
-                if(keepLoggedInCB.isChecked()){
-                    SharedPreferences sharedPref = mContext.getSharedPreferences(
-                            getString(R.string.user_id), Context.MODE_PRIVATE);
-                    String uid = sharedPref.getString("user_id","");
-                    if(uid==""){
-                        SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putString(getString(R.string.user_id), "kk"+loginIdET.getText().toString()).apply();
-                        editor.commit();
-                        uid = sharedPref.getString("user_id","111");
-                        Toast.makeText(mContext,"hello"+uid,Toast.LENGTH_LONG).show();
-                    }else{
-                        Toast.makeText(mContext,uid,Toast.LENGTH_LONG).show();
-                    }
-
-                }
-                //Toast.makeText(mContext,error.toString(),Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext,error.toString(),Toast.LENGTH_LONG).show();
                 //Toast.makeText(mContext,"Please check your credentials and try again",Toast.LENGTH_LONG).show();
             }
         });
         queue.add(objectRequest);
+        //remove later
         return true;
     }
 
