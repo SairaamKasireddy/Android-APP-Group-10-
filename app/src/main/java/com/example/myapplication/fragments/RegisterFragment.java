@@ -1,6 +1,8 @@
 package com.example.myapplication.fragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,10 +17,17 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.myapplication.R;
+import com.example.myapplication.activities.LoginActivity;
+import com.example.myapplication.activities.MainActivity;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class RegisterFragment extends Fragment {
@@ -28,6 +37,7 @@ public class RegisterFragment extends Fragment {
     EditText registerNameET;
     EditText registerPhoneET;
     EditText registerMailET;
+    EditText registerPasswordET;
     Spinner yearSpinner;
     Spinner branchSpinner;
     Spinner sectionSpinner;
@@ -54,6 +64,7 @@ public class RegisterFragment extends Fragment {
         registerMailET = view.findViewById(R.id.registerMailET);
         yearSpinner = view.findViewById(R.id.yearSpinner);
         branchSpinner = view.findViewById(R.id.branchSpinner);
+        registerPasswordET = view.findViewById(R.id.registerPasswordET);
         sectionSpinner = view.findViewById(R.id.sectionSpinner);
         registerBtn = view.findViewById(R.id.registerBtn);
 
@@ -86,16 +97,49 @@ public class RegisterFragment extends Fragment {
         try {
             Long userId = Long.parseLong(registerIdET.getText().toString());
             String userName = registerNameET.getText().toString();
+            String password = registerPasswordET.getText().toString();
             Long userPhone = Long.parseLong(registerPhoneET.getText().toString());
             String userMail = registerMailET.getText().toString();
             String userYear = yearSpinner.getSelectedItem().toString();
             String userBranch = branchSpinner.getSelectedItem().toString();
             Integer userSection = Integer.parseInt(sectionSpinner.getSelectedItem().toString());
-            if(checkDetails(userId, userName, userPhone, userMail)&&matchDetails(userId,userMail,userBranch)){
+            data.put("userId",userId);
+            data.put("userName",userName);
+            data.put("password",password);
+            data.put("userPhone",userPhone);
+            data.put("userMail",userMail);
+            data.put("userYear",userYear);
+            data.put("userBranch",userBranch);
+            data.put("userSection",userSection);
+            if(checkDetails(userId, userName, userPhone, userMail, password)&&matchDetails(userId,userMail,userBranch)){
                 Toast.makeText(mContext,"successfully registered",Toast.LENGTH_LONG).show();
             }
+            String url="http://ec2-3-7-131-60.ap-south-1.compute.amazonaws.com/login";
+            queue = Volley.newRequestQueue(mContext);
+            objectRequest = new JsonObjectRequest(Request.Method.POST, url, data,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            String accessTkn = null;
+                            try {
+                                accessTkn = response.getString("access_token");
+                                Toast.makeText(mContext,"Registration Successful",Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(mContext, LoginActivity.class);
+                                startActivity(intent);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(mContext,"Something went wrong",Toast.LENGTH_LONG).show();
+                    //Toast.makeText(mContext,"Please check your credentials and try again",Toast.LENGTH_LONG).show();
+                }
+            });
+            queue.add(objectRequest);
         }catch (Exception e){
-            Toast.makeText(mContext,"please check your details",Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext,"please check your details and try again",Toast.LENGTH_LONG).show();
         }
     }
 
@@ -115,7 +159,24 @@ public class RegisterFragment extends Fragment {
         }
     }
 
-    private Boolean checkDetails(Long userId, String userName, Long userPhone, String userMail) {
-        return true;
+    private Boolean checkDetails(Long userId, String userName, Long userPhone, String userMail, String password) {
+        if((userId/10000000)!=1601){
+            Toast.makeText(mContext,"enter valid user Id",Toast.LENGTH_LONG).show();
+            return false;
+        }else if(userName==""){
+            Toast.makeText(mContext,"Please enter a valid name",Toast.LENGTH_LONG).show();
+            return false;
+        }else if(!((userPhone/(long)(1e9))>0)&&((userPhone/(long)(1e10))==0)){
+            Toast.makeText(mContext,"Please enter a valid Phone number",Toast.LENGTH_LONG).show();
+            return false;
+        }else if(!(userMail!=""&&userMail.length()>24)){
+            Toast.makeText(mContext,"Please enter a valid mail",Toast.LENGTH_LONG).show();
+            return false;
+        }else if(password.length()<8){
+            Toast.makeText(mContext,"Please enter a password of minimum 8 characters",Toast.LENGTH_LONG).show();
+            return false;
+        }else {
+            return true;
+        }
     }
 }

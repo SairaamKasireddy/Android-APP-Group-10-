@@ -21,7 +21,8 @@
         </activity>>
         <activity
             android:name=".activities.LoginActivity"
-            android:label="Login/Register" />
+            android:label="Login/Register"
+            android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".activities.MainActivity"></activity>
     </application>
 

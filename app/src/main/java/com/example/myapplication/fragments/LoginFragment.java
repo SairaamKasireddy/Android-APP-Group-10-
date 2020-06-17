@@ -81,12 +81,13 @@ public class LoginFragment extends Fragment {
     private Boolean isValid() {
         //inserting user given values into JSON object
         try{
-            String username=loginIdET.getText().toString();
+            String userId=loginIdET.getText().toString();
             String password=loginPasswordET.getText().toString();
             Boolean captain=loginCaptainCB.isChecked();
-            data.put("username",username);
+            data.put("userId",userId);
             data.put("password",password);
         }catch(Exception e){
+            Toast.makeText(mContext,"Please check your details",Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
 
@@ -106,13 +107,11 @@ public class LoginFragment extends Fragment {
                                 if(uid==""){
                                     Toast.makeText(mContext,"uid is empty",Toast.LENGTH_LONG).show();
                                     SharedPreferences.Editor editor = sharedPref.edit();
-                                    String newuid = "160117733167";
-                                    editor.putInt(getString(R.string.user_id), Integer.parseInt(newuid));
+                                    editor.putLong(getString(R.string.user_id), Long.parseLong(loginIdET.getText().toString()));
                                     editor.commit();
                                 }else{
                                     Toast.makeText(mContext,uid,Toast.LENGTH_LONG).show();
                                 }
-
                             }
                             Intent intent = new Intent(mContext, MainActivity.class);
                             startActivity(intent);
