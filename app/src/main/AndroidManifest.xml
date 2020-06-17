@@ -8,22 +8,25 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/cbit_logo"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:label="Shruthi Sports"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.SplashActivity"
+        <activity android:name=".activities.CaptainActivity"></activity>
+        <activity
+            android:name=".activities.SplashActivity"
             android:theme="@style/Theme.Design.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>>
+        </activity>
         <activity
             android:name=".activities.LoginActivity"
             android:label="Login/Register"
-            android:windowSoftInputMode="stateHidden"/>
-        <activity android:name=".activities.MainActivity"></activity>
+            android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".activities.MainActivity" />
     </application>
 
 </manifest>

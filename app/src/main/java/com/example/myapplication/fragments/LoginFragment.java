@@ -24,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapplication.R;
+import com.example.myapplication.activities.CaptainActivity;
 import com.example.myapplication.activities.MainActivity;
 
 import org.json.JSONException;
@@ -114,6 +115,9 @@ public class LoginFragment extends Fragment {
                                 }
                             }
                             Intent intent = new Intent(mContext, MainActivity.class);
+                            if(loginCaptainCB.isChecked()){
+                                intent = new Intent(mContext, CaptainActivity.class);
+                            }
                             startActivity(intent);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -130,6 +134,11 @@ public class LoginFragment extends Fragment {
         });
         queue.add(objectRequest);
         //remove later
+        Intent intent = new Intent(mContext, MainActivity.class);
+        if(loginCaptainCB.isChecked()){
+            intent = new Intent(mContext, CaptainActivity.class);
+        }
+        startActivity(intent);
         return true;
     }
 
